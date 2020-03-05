@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import cakeImg from "./cake.png";
 import Recipe from "./recipe";
 
 const cakes = [
@@ -10,11 +9,10 @@ const cakes = [
 ];
 
 const App = () => {
-
   // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == document.getElementById("myModal")) {
-        setShowModal(false);
+  window.onclick = function(event) {
+    if (event.target === document.getElementById("myModal")) {
+      setShowModal(false);
     }
   };
 
@@ -40,13 +38,13 @@ window.onclick = function(event) {
         </ul>
       </nav>
       {showModal && (
-          <div id="myModal" className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={() => clickClose()}>
-            &times;
-          </span>
-          <Recipe number={recipeNumber} />
-        </div>
+        <div id="myModal" className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={() => clickClose()}>
+              &times;
+            </span>
+            <Recipe number={recipeNumber} />
+          </div>
         </div>
       )}
       <div className="container">
@@ -55,15 +53,14 @@ window.onclick = function(event) {
         </p>
         {cakes.map(({ name, image, number }) => (
           <div className="card" key={name}>
-            <img className="card--avatar" src={image} />
+            <img className="card--avatar" src={image} alt="cake"/>
             <h1 className="card--title">{name}</h1>
-            <a className="card--link" onClick={() => clickOpen(number)}>
+            <button  className="card--link" onClick={() => clickOpen(number)}>
               Try
-            </a>
+            </button>
           </div>
         ))}
       </div>
-      
     </>
   );
 };
