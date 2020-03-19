@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Recipe from "./recipe";
+import firebase from "./firebase";
 
 const cakes = [
   { name: "Chocolate cake", link: "", image: "./cake.png", number: 0 },
@@ -17,7 +18,21 @@ const App = () => {
   };
 
   const [showModal, setShowModal] = useState(false);
-  const [recipeNumber, setRecipeNumber] = useState(1);
+  const [recipeNumber, setRecipeNumber] = useState("");
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("recipe")
+      .onSnapshot(snapshot => {
+        const newRecipes = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setRecipes(newRecipes);
+      });
+  }, []);
 
   const clickClose = () => {
     setShowModal(false);
@@ -43,7 +58,7 @@ const App = () => {
             <span className="close" onClick={() => clickClose()}>
               &times;
             </span>
-            <Recipe number={recipeNumber} />
+            {/*<Recipe />*/}
           </div>
         </div>
       )}
@@ -51,11 +66,11 @@ const App = () => {
         <p className="text">
           Some vegan and gluten free cakes, cookies and other pastries. Enjoy
         </p>
-        {cakes.map(({ name, image, number }) => (
-          <div className="card" key={name}>
-            <img className="card--avatar" src={image} alt="cake"/>
-            <h1 className="card--title">{name}</h1>
-            <button  className="card--link" onClick={() => clickOpen(number)}>
+        {recipes.map(({ id }) => (
+          <div className="card" key={id}>
+            <img className="card--avatar" src="./cake.png" alt="cake" />
+            <h1 className="card--title">{id}</h1>
+            <button className="card--link" onClick={() => clickOpen(id)}>
               Try
             </button>
           </div>
